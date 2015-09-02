@@ -16,16 +16,16 @@ use pocketmine\event\server\ServerCommandEvent;
 use SimpleAuth\event\PlayerAuthenticateEvent;
 
 class Main extends PluginBase implements Listener{
-    public $auth;
+    //private $auth;
 
     public function onEnable(){
         $this->getServer()->getPluginManager()->registerEvents($this, $this);
         $this->getLogger()->info(TextFormat::GREEN . "InventoryCommand Enabled!");
         $this->saveDefaultConfig();
+        //$this->auth = $this->getServer()->getPluginManager()->getPlugin("SimpleAuth");
         if(count($this->getConfig()->get("data")) > 35){
             $this->getLogger()->error("Exeption: Number of slots out of range!");
             $this->getServer()->shutdown();
-            $this->auth = $this->getServer()->getPluginManager()->getPlugin("SimpleAuth");
         }
     }
 
@@ -56,6 +56,9 @@ class Main extends PluginBase implements Listener{
         }
     }
 
+    /**
+     * @priority MONITOR
+     */
     public function onItemHeld(PlayerItemHeldEvent $event){
         $player = $event->getPlayer();
         $item = $event->getItem();
@@ -65,15 +68,20 @@ class Main extends PluginBase implements Listener{
 
         if(!$this->isAllowedWorld($player->getLevel()))
             return;
-
+        
+        /*if($this->auth !== null && !$this->auth->isPlayerAuthenticated($player))
+            return;*/
+        
+        if($event->isCancelled())
+            return;
+                
         foreach($this->getConfig()->get("data") as $slot => $g) {
             if ($item->getId() === $g["id"] && $item->getDamage() === $g["damage"]) {
                 foreach ($g["command"] as $cmd){
                     $popup = $g["popup"];
-                    $player->sendPopup("$popup");
+                    $player->sendPopup($popup);
                     if(!empty($cmd))
-                        if($this->auth->isPlayerAuthenticated($player)){
-                            $this->getServer()->dispatchCommand(new ConsoleCommandSender(), str_replace("{player}", $player->getName(), str_replace("/", "", $cmd)));
+                        $this->getServer()->dispatchCommand(new ConsoleCommandSender(), str_replace("{player}", $player->getName(), str_replace("/", "", $cmd)));
                     }
                 }
             }
