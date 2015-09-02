@@ -24,7 +24,7 @@ class Main extends PluginBase implements Listener{
         $this->saveDefaultConfig();
         $this->auth = $this->getServer()->getPluginManager()->getPlugin("SimpleAuth");
         if(count($this->getConfig()->get("data")) > 35){
-            $this->getLogger()->error("Exeption: Number of slots out of range!");
+            $this->getLogger()->error("Exception: Number of slots out of range!");
             $this->getServer()->shutdown();
         }
     }
