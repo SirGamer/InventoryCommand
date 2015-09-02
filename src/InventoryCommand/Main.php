@@ -16,13 +16,13 @@ use pocketmine\event\server\ServerCommandEvent;
 use SimpleAuth\event\PlayerAuthenticateEvent;
 
 class Main extends PluginBase implements Listener{
-    //private $auth;
+    private $auth;
 
     public function onEnable(){
         $this->getServer()->getPluginManager()->registerEvents($this, $this);
         $this->getLogger()->info(TextFormat::GREEN . "InventoryCommand Enabled!");
         $this->saveDefaultConfig();
-        //$this->auth = $this->getServer()->getPluginManager()->getPlugin("SimpleAuth");
+        $this->auth = $this->getServer()->getPluginManager()->getPlugin("SimpleAuth");
         if(count($this->getConfig()->get("data")) > 35){
             $this->getLogger()->error("Exeption: Number of slots out of range!");
             $this->getServer()->shutdown();
@@ -69,10 +69,7 @@ class Main extends PluginBase implements Listener{
         if(!$this->isAllowedWorld($player->getLevel()))
             return;
         
-        /*if($this->auth !== null && !$this->auth->isPlayerAuthenticated($player))
-            return;*/
-        
-        if($event->isCancelled())
+        if($event->isCancelled() || ($this->auth !== null && !$this->auth->isPlayerAuthenticated($player)))
             return;
                 
         foreach($this->getConfig()->get("data") as $slot => $g) {
@@ -82,7 +79,6 @@ class Main extends PluginBase implements Listener{
                     $player->sendPopup($popup);
                     if(!empty($cmd))
                         $this->getServer()->dispatchCommand(new ConsoleCommandSender(), str_replace("{player}", $player->getName(), str_replace("/", "", $cmd)));
-                    }
                 }
             }
         }
