@@ -94,7 +94,7 @@ class Main extends PluginBase implements Listener{
             if($item->getId() !== Block::AIR && $item->getMaxStackSize() <= $g["amount"]){
                 $item->setCount($g["amount"]);
                 if(!$player->getInventory()->contains($item) && $player->getInventory()->canAddItem($item)){
-  $slot = (int) $slot{strlen($slot) - 1};
+                    $slot = (int) str_replace("slot", "", $slot);
                     $player->getInventory()->setItem($slot, $item);
                 }
             }
