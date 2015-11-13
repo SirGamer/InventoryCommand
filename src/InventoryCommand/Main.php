@@ -40,6 +40,7 @@ class Main extends PluginBase implements Listener{
     private function isAllowedWorld(Level $level){
         $level = strtolower($level->getName());
         $get = $this->getConfig()->get("level");
+        $this->world = $get;
         if(empty($get) || !$get)
             return true;
         else{
@@ -54,6 +55,10 @@ class Main extends PluginBase implements Listener{
                 return $level == strtolower(trim($get));
             }
         }
+    }
+
+    public function getICWorld(){
+        return $this->world;
     }
 
     /**
