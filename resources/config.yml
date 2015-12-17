@@ -15,7 +15,7 @@ data:
     damage: 0
     #write here item amount
     amount: 1
-    popup:
+    tip:
     command:
       - say fycarman is awesome!
       -
@@ -24,7 +24,7 @@ data:
     id: 277
     damage: 0
     amount: 1
-    popup:
+    tip:
     command:
       - tell {player} made by fycarman!
       -
