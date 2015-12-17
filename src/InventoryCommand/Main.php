@@ -81,7 +81,9 @@ class Main extends PluginBase implements Listener{
             if ($item->getId() === $g["id"] && $item->getDamage() === $g["damage"]) {
                 foreach ($g["command"] as $cmd){
                     $popup = $g["popup"];
+                    $tip = $g["tip"];
                     $player->sendPopup($popup);
+                    $player->sendTip($tip);
                     if(!empty($cmd))
                         $this->getServer()->dispatchCommand(new ConsoleCommandSender(), str_replace("{player}", $player->getName(), str_replace("/", "", $cmd)));
                 }
